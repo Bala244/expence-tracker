@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Transation } from "./Transation";
 
 import "firebase/firestore";
@@ -19,6 +19,7 @@ export const TransationList = () => {
       )
       .then(() => setTransations(dbTransations))
       .catch((err) => console.log(err));
+    //eslint-disable-next-line
   }, [transations]);
 
   return (

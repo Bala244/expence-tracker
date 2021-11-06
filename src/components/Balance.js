@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "firebase/firestore";
 import app from "../Firebase";
 
 export const Balance = () => {
-  const [dbTransations, setDbTransations] = useState([]);
+  //   const [dbTransations, setDbTransations] = useState([]);
   const [balance, setBalance] = useState(0);
   const db = app.firestore();
 
   useEffect(() => {
     const dbTransations = [];
     db.collection("expenseHistory").onSnapshot((querySnapShot) => {
-      querySnapShot.docs.map((doc) => {
+      querySnapShot.docs.forEach((doc) => {
         dbTransations.push(doc.data());
       });
       const balance = querySnapShot.docs
@@ -19,7 +19,8 @@ export const Balance = () => {
         .toFixed(2);
       setBalance(balance);
     });
-  }, [dbTransations]);
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <>

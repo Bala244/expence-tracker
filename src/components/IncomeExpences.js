@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "firebase/firestore";
 import app from "../Firebase";
 
 export const IncomeExpences = () => {
-  const [dbTransations, setDbTransations] = useState([]);
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
   const db = app.firestore();
@@ -12,7 +11,7 @@ export const IncomeExpences = () => {
   useEffect(() => {
     const dbTransations = [];
     db.collection("expenseHistory").onSnapshot((querySnapShot) => {
-      querySnapShot.docs.map((doc) => {
+      querySnapShot.docs.forEach((doc) => {
         dbTransations.push(doc.data());
       });
 
@@ -30,7 +29,8 @@ export const IncomeExpences = () => {
 
       console.log(income, expense);
     });
-  }, [dbTransations]);
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <div className="inc-exp-container">
