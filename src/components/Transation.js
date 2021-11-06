@@ -1,21 +1,27 @@
-import React,{ useContext } from 'react';
-
-import { GlobalContext } from '../context/GlobalState';
-
+import React, { useContext, useEffect, useState } from "react";
+import "firebase/firestore";
+import app from "../Firebase";
 
 export const Transation = ({ transation }) => {
-    const { deleteTransation } = useContext(GlobalContext);
+  const sign = transation.amount > 0 ? "+" : "-";
 
-    const sign = transation.amount > 0 ? '+' : '-';
+  const db = app.firestore();
 
-    return (
-        <li className={transation.amount > 0 ? 'plus' : 'minus' }>
-            { transation.text } <span>{sign}${ Math.abs(transation.amount) }</span>
-            <button 
-            onClick={() => deleteTransation(transation.id)} 
-            className="delete-btn">
-                x
-            </button>
-        </li>
-    )
-}
+  const deleteTransation = () => {
+    db.collection("expenseHistory")
+      .doc(transation.docId)
+      .delete()
+      .then((succ) => console.log("deleted", succ));
+  };
+  return (
+    <li className={transation.amount > 0 ? "plus" : "minus"}>
+      {transation.text}{" "}
+      <span>
+        {sign}${Math.abs(transation.amount)}
+      </span>
+      <button onClick={() => deleteTransation()} className="delete-btn">
+        x
+      </button>
+    </li>
+  );
+};

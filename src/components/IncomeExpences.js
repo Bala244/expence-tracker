@@ -1,31 +1,52 @@
-import React,{ useContext } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import { GlobalContext } from '../context/GlobalState';
+import "firebase/firestore";
+import app from "../Firebase";
 
 export const IncomeExpences = () => {
-    const { transations } = useContext(GlobalContext);
+  const [dbTransations, setDbTransations] = useState([]);
+  const [income, setIncome] = useState(0);
+  const [expense, setExpense] = useState(0);
+  const db = app.firestore();
 
-    const amounts = transations.map(transation => transation.amount);
-    const income = amounts
-        .filter(item => item > 0)
-        .reduce((acc, item) => (acc += item), 0)
+  useEffect(() => {
+    const dbTransations = [];
+    db.collection("expenseHistory").onSnapshot((querySnapShot) => {
+      querySnapShot.docs.map((doc) => {
+        dbTransations.push(doc.data());
+      });
+
+      const income = querySnapShot.docs
+        .filter((item) => item.data().amount > 0)
+        .reduce((acc, item) => (acc += item.data().amount), 0)
         .toFixed(2);
+      setIncome(income);
 
-    const expense = (
-        amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) *
-        -1
-    ).toFixed(2);
-    return (
-        <div className="inc-exp-container">
-            <div>
-                <h4>Income</h4>
-                <p id="money-plus" className="money plus">+Rs.{income}</p>
-            </div>
-            <div>
-                <h4>Expence</h4>
-                <p id="money-minus" className="money minus">-Rs.{expense}</p>
-            </div>
-        </div>
-    )
-}
+      const expense = querySnapShot.docs
+        .filter((item) => item.data().amount < 0)
+        .reduce((acc, item) => (acc += item.data().amount), 0)
+        .toFixed(2);
+      setExpense(expense);
 
+      console.log(income, expense);
+    });
+  }, [dbTransations]);
+
+  return (
+    <div className="inc-exp-container">
+      <div>
+        <h4>Income</h4>
+        <p id="money-plus" className="money plus">
+          {console.log(income, expense)}
+          +Rs.{income}
+        </p>
+      </div>
+      <div>
+        <h4>Expence</h4>
+        <p id="money-minus" className="money minus">
+          -Rs.{expense}
+        </p>
+      </div>
+    </div>
+  );
+};
