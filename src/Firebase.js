@@ -11,8 +11,8 @@ const Firebase = firebase.initializeApp({
   appId: "1:467953948479:web:09d3d0178ab793491f658a",
   measurementId: "G-W49X9X5JDH",
 });
-let firestore = firebase.firestore();
+// let firestore = firebase.firestore();
 
-export { firestore };
+// export { firestore };
 
 export default Firebase;

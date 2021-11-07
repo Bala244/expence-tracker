@@ -1,20 +1,21 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import "./App.css";
-import { AddTransation } from "./components/AddTransation";
-import { Balance } from "./components/Balance";
-import { Header } from "./components/Header";
-import { IncomeExpences } from "./components/IncomeExpences";
-import { TransationList } from "./components/TransationList";
+
+import Home from "./screens/Home";
+import Login from "./screens/Login";
+import Signup from "./screens/Signup";
 
 function App() {
   return (
     <div>
-      <Header />
-      <div className="container">
-        <Balance />
-        <IncomeExpences />
-        <TransationList />
-        <AddTransation />
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} exact />
+          <Route path="/login" element={<Login />} exact />
+          <Route path="/signup" element={<Signup />} exact />
+        </Routes>
+      </Router>
     </div>
   );
 }
